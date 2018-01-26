@@ -15,9 +15,9 @@ const take = require('callbag-take');
 
 const source = take(3)(interval(1000));
 
-source(0, observe(x => console.log(x))); // 1
+source(0, observe(x => console.log(x))); // 0
+                                         // 1
                                          // 2
-                                         // 3
 ```
 
 On a pullable source:
