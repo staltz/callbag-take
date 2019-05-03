@@ -6,7 +6,7 @@ const take = max => source => (start, sink) => {
   function talkback(t, d) {
     if (t === 2) {
       end = true;
-      sourceTalkback(t, d)
+      sourceTalkback(t, d);
     }
     else if (taken < max) sourceTalkback(t, d);
   }
