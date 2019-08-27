@@ -7,8 +7,7 @@ const take = max => source => (start, sink) => {
     if (t === 2) {
       end = true;
       sourceTalkback(t, d);
-    }
-    else if (taken < max) sourceTalkback(t, d);
+    } else if (taken < max) sourceTalkback(t, d);
   }
   source(0, (t, d) => {
     if (t === 0) {
@@ -17,10 +16,12 @@ const take = max => source => (start, sink) => {
     } else if (t === 1) {
       if (taken < max) {
         taken++;
-        sink(t, d);
         if (taken === max && !end) {
+          sink(1, d);
           sink(2);
           sourceTalkback(2);
+        } else {
+          sink(1, d);
         }
       }
     } else {
