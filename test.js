@@ -324,12 +324,12 @@ test('it does not mutually terminate a sink', t => {
       sourceTalkback(t, d)
     }
     source(0, (t, d) => {
+      if (t === 2) {
+        loggerTerminations += 1;
+      }
       if (t === 0) {
         sourceTalkback = d;
         sink(0, talkback);
-      }
-      else if (t === 2) {
-        loggerTerminations += 1;
       }
       else {
         sink(t, d)
