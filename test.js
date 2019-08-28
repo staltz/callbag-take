@@ -281,3 +281,71 @@ test('it does not redundantly terminate a synchronous pullable source', t => {
     t.end();
   }, 700);
 });
+
+test('it does not mutually terminate a sink', t => {
+  let terminations = 0;
+  let loggerTerminations = 0;
+
+  const rangeInfinite = start => (type, sink) => {
+    if (type !== 0) return;
+    var counter = start;
+    sink(0, (type, data) => {
+      if (type === 1) {
+        const send = counter;
+        counter++;
+        sink(1, send);
+      }
+      if (type === 2) {
+        terminations += 1;
+      }
+    });
+  };
+
+  function makeSink() {
+    let talkback;
+    return (type, data) => {
+      if (type === 0) {
+        talkback = data;
+        talkback(1);
+      }
+      if (type === 1) {
+        talkback(1);
+      }
+    };
+  }
+
+  const logger = source => (start, sink) => {
+    if (start !== 0) return;
+    let sourceTalkback;
+    function talkback(t, d) {
+      if (t === 2) {
+        loggerTerminations += 1;
+      }
+      sourceTalkback(t, d)
+    }
+    source(0, (t, d) => {
+      if (t === 0) {
+        sourceTalkback = d;
+        sink(0, talkback);
+      }
+      else if (t === 2) {
+        loggerTerminations += 1;
+      }
+      else {
+        sink(t, d)
+      }
+    })
+  }
+
+  const source = rangeInfinite(7);
+  const taken = take(3)(logger(take(3)(source)));
+  const sink = makeSink();
+  taken(0, sink);
+
+  setTimeout(() => {
+    t.equal(terminations, 1, 'only 1 source termination happened');
+    t.equal(loggerTerminations, 1, 'logger only observed 1 termination')
+    t.pass('nothing else happens');
+    t.end();
+  }, 700);
+});

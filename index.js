@@ -16,12 +16,11 @@ const take = max => source => (start, sink) => {
     } else if (t === 1) {
       if (taken < max) {
         taken++;
+        sink(t, d);
         if (taken === max && !end) {
-          sink(1, d);
+          end = true
           sink(2);
           sourceTalkback(2);
-        } else {
-          sink(1, d);
         }
       }
     } else {
