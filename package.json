@@ -1,6 +1,6 @@
 {
   "name": "callbag-take",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Callbag operator that limits the total amount of data sent through",
   "repository": {
     "type": "git",
