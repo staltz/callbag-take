@@ -19,8 +19,8 @@ const take = max => source => (start, sink) => {
         sink(t, d);
         if (taken === max && !end) {
           end = true
-          sink(2);
           sourceTalkback(2);
+          sink(2);
         }
       }
     } else {
