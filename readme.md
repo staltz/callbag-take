@@ -10,12 +10,12 @@ On a listenable source:
 
 ```js
 const interval = require('callbag-interval');
-const observe = require('callbag-observe');
+const forEach = require('callbag-for-each');
 const take = require('callbag-take');
 
 const source = take(3)(interval(1000));
 
-source(0, observe(x => console.log(x))); // 0
+forEach(x => console.log(x))(source);    // 0
                                          // 1
                                          // 2
 ```
@@ -24,7 +24,7 @@ On a pullable source:
 
 ```js
 const fromIter = require('callbag-from-iter');
-const iterate = require('callbag-iterate');
+const forEach = require('callbag-for-each');
 const take = require('callbag-take');
 
 function* range(from, to) {
@@ -37,7 +37,7 @@ function* range(from, to) {
 
 const source = take(4)(fromIter(range(100, 999)));
 
-source(0, iterate(x => console.log(x))); // 100
+forEach(x => console.log(x))(source);    // 100
                                          // 101
                                          // 102
                                          // 103
